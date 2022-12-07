@@ -1,0 +1,208 @@
+import { useState } from "react";
+import axios from "axios";
+import useTrackLocation from "../../hooks/use-track-location";
+import { GoogleMap, useLoadScript, Marker } from 'react-google-maps';
+
+
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import { Box } from "@mui/system";
+import { useEffect } from "react";
+import { Button } from "@mui/material";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import {getPlacesData} from "../api";
+
+
+function MyMap() {
+    const [coordinates, setCoordinates] = useState({});
+    const [isFindingLocation, setIsFindingLocation] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const success = (position) => {
+        setCoordinates({lat: position.coords.latitude, lng: position.coords.longitude});
+        setIsFindingLocation(false);
+    };
+
+    const error = () => {
+        console.log("geolocation error");
+    };
+
+    useEffect(() => {
+        setIsFindingLocation(true);
+        if (!navigator.geolocation) {
+            console.log("Geolocation is not supported by your browser");
+        } else {
+            navigator.geolocation.getCurrentPosition(success, error);
+        }
+    }, []);
+
+    useEffect(() => {
+        const options = {
+            method: 'GET',
+            url: 'https://travel-advisor.p.rapidapi.com/restaurants/list-in-boundary',
+            params: {
+              bl_latitude: '11.847676',
+              tr_latitude: '12.838442',
+              bl_longitude: '109.095887',
+              tr_longitude: '109.149359',
+              limit: '30',
+            },
+            headers: {
+              'X-RapidAPI-Key': '4d72f977a4msh84e019d97fe9773p1a1817jsn9aae2affa6ee',
+              'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com'
+            }
+          };
+          
+          axios.request(options).then(function (response) {
+              console.log(response.data);
+          }).catch(function (error) {
+              console.error(error);
+          });
+    }, []);
+
+
+    const handleChooseRatingClick = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+    
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleRestaurantsBtnClick = () => {
+
+    }
+
+    const handleAttractionsBtnClick = () => {
+
+    }
+
+
+
+    const getMyLocationBtnHandler = () => {
+        handleTrackLocation();
+    }
+
+
+
+    if(!isLoaded) {
+        return <p>loading...</p>
+    }
+
+    return (
+        <Grid container>
+            <Grid item xs={6} md={4}>
+                <Stack>
+                    <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+                    <Box>
+                        place list
+                    </Box>
+                </Stack>
+            </Grid>
+            <Grid item xs={6} md={8} sx={{position: "relative"}}>
+                    <GoogleMap
+                        defaultExtraMapTypes={{key: "AIzaSyDy-WW7-mLEN7xlHLqd0yLy5SS37dkQT2Q"}}
+                        defaultZoom={2}
+                        center={coordinates}
+                        mapContainerClassName="map-container"
+                        onClick={(e) => {}}
+                        onBoundsChanged={(e) => {
+                            console.log(e);
+                        }}
+                    >
+                        <Marker position={coordinates} />
+                    </GoogleMap>
+                <Box sx={{position: "absolute", top: "0", right: "20rem", display: "flex"}}>
+                    <div>
+                        <Button
+                            id="choose-rating"
+                            aria-controls={open ? 'basic-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? 'true' : undefined}
+                            onClick={handleChooseRatingClick}
+                            variant="contained"
+                        >Choose Rating</Button>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{
+                            'aria-labelledby': 'choose-rating',
+                            }}
+                        >
+                            <MenuItem>All Ratings</MenuItem>
+                            <MenuItem onClick={handleClose}>2.0 **</MenuItem>
+                            <MenuItem onClick={handleClose}>3.0 ***</MenuItem>
+                            <MenuItem onClick={handleClose}>4.0 ****</MenuItem>
+                            <MenuItem onClick={handleClose}>5.0 *****</MenuItem>
+                        </Menu>
+                    </div>
+                    <Button variant="contained" onClick={handleRestaurantsBtnClick}>Restaurants</Button>
+                    <Button variant="contained" onClick={handleAttractionsBtnClick}>Attractions</Button>
+                </Box>
+            </Grid>
+        </Grid>
+    );
+}
+==============================================================
+export default MyMap;
+==========================================================
+useEffect(() => {
+    const options = {
+        method: 'GET',
+        url: 'https://travel-advisor.p.rapidapi.com/restaurants/list-in-boundary',
+        params: {
+          bl_latitude: '11.847676',
+          tr_latitude: '12.838442',
+          bl_longitude: '109.095887',
+          tr_longitude: '109.149359',
+          limit: '30',
+        },
+        headers: {
+          'X-RapidAPI-Key': '4d72f977a4msh84e019d97fe9773p1a1817jsn9aae2affa6ee',
+          'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com'
+        }
+      };
+      
+      axios.request(options).then(function (response) {
+          console.log(response.data);
+      }).catch(function (error) {
+          console.error(error);
+      });
+}, []);
+
+===================================================================
+
+<Box sx={{position: "absolute", top: "0", right: "20rem", display: "flex"}}>
+                    <div>
+                        <Button
+                            id="choose-rating"
+                            aria-controls={open ? 'basic-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? 'true' : undefined}
+                            onClick={handleChooseRatingClick}
+                            variant="contained"
+                        >Choose Rating</Button>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{
+                            'aria-labelledby': 'choose-rating',
+                            }}
+                        >
+                            <MenuItem>All Ratings</MenuItem>
+                            <MenuItem onClick={handleClose}>2.0 **</MenuItem>
+                            <MenuItem onClick={handleClose}>3.0 ***</MenuItem>
+                            <MenuItem onClick={handleClose}>4.0 ****</MenuItem>
+                            <MenuItem onClick={handleClose}>5.0 *****</MenuItem>
+                        </Menu>
+                    </div>
+                    <Button variant="contained" onClick={handleRestaurantsBtnClick}>Restaurants</Button>
+                    <Button variant="contained" onClick={handleAttractionsBtnClick}>Attractions</Button>
+                </Box>

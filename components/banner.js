@@ -1,0 +1,18 @@
+import Head from 'next/head'
+import Image from 'next/image'
+import styles from './banner.module.css';
+
+export default function Banner(props) {
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.title}>
+        <span className={styles.title1}>Coffee</span>
+        <span className={styles.title2}>Connoisseur</span>
+      </h1>
+      <p className={styles.subTitle}>Discover your local coffee shop!</p>
+      <div className={styles.buttonWrapper}>
+        <button className={styles.button} onClick={props.bannerButtonOnClick}>{props.buttonText}</button>
+      </div>
+    </div>
+  )
+}
