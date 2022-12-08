@@ -38,8 +38,8 @@ function MyMap() {
 
     useEffect(() => {
         const filteredData = places.filter(place => {
-            if(place.rating) {
-                if(place.rating == ratingValue) {
+            if (place.rating) {
+                if (place.rating == ratingValue) {
                     return place;
                 }
             }
@@ -50,7 +50,7 @@ function MyMap() {
 
     // when the page load, get current user location
     const success = (position) => {
-        setCoordinates({lat: position.coords.latitude, lng: position.coords.longitude});
+        setCoordinates({ lat: position.coords.latitude, lng: position.coords.longitude });
         setIsFindingLocation(false);
     };
 
@@ -69,18 +69,29 @@ function MyMap() {
     // get current user location end
 
     useEffect(() => {
-      axios.request({
-        method: 'GET',
-        url: '/api/places',
-        params: {
-          message: "working ?"
-        }
-      }).then((response) => {
-        console.log("response", response);
-      }).catch((error) => {
-        console("error", error);
-      })
-    });
+        setIsLoadingPlaces(true);
+        axios.request({
+            method: 'GET',
+            url: '/api/places',
+            params: {
+                types: types,
+                bl_latitude: bounds?.sw.lat,
+                tr_latitude: bounds?.ne.lat,
+                bl_longitude: bounds?.sw.lng,
+                tr_longitude: bounds?.ne.lng,
+                limit: '8',
+            }
+        }).then((response) => {
+            console.log("response", response);
+            return response.data;
+        }).then((data) => {
+            let {message, placesData} = data;
+            setPlaces(placesData);
+            console.log("data", data);
+        }).catch((error) => {
+            console.log("error", error);
+        })
+    }, []);
 
 
     useEffect(() => {
@@ -134,42 +145,42 @@ function MyMap() {
     }
 
     const setCoordinatesState = (e) => {
-        setCoordinates({lat: e.center.lat, lng: e.center.lng});
+        setCoordinates({ lat: e.center.lat, lng: e.center.lng });
     }
 
     const setBoundsState = (e) => {
-      setBounds({ne: e.marginBounds.ne, sw: e.marginBounds.sw});
+        setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
     }
 
     return (
         <>
-        <Grid container>
-            <Grid item xs={12} md={4} sx={{height: "100vh", overflowY: "scroll"}}>
-                <Grid container direction="column" justifyContent="center" sx={{ paddingInline: "1rem"}}>
-                    <Grid item xs md>
-                        <TextField
-                            fullWidth
-                            id="outlined-basic"
-                            label="Outlined"
-                            variant="outlined"
-                        />
-                    </Grid>
-                    <Grid item>
-                      {/* {isLoadingPlaces && <Box>loading...</Box>} */}
-                      <List />
+            <Grid container>
+                <Grid item xs={12} md={4} sx={{ height: "100vh", overflowY: "scroll" }}>
+                    <Grid container direction="column" justifyContent="center" sx={{ paddingInline: "1rem" }}>
+                        <Grid item xs md>
+                            <TextField
+                                fullWidth
+                                id="outlined-basic"
+                                label="Outlined"
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item>
+                            {/* {isLoadingPlaces && <Box>loading...</Box>} */}
+                            <List />
+                        </Grid>
                     </Grid>
                 </Grid>
+                <Grid item xs={12} md={8} sx={{ position: "relative" }}>
+                    <Map
+                        coordinates={coordinates}
+                        places={places}
+                        setCoordinatesState={setCoordinatesState}
+                        setBoundsState={setBoundsState}
+                    />
+                    <TopButtons />
+                </Grid>
             </Grid>
-            <Grid item xs={12} md={8} sx={{position: "relative"}}>
-              <Map
-                coordinates={coordinates}
-                places={places}
-                setCoordinatesState={setCoordinatesState}
-                setBoundsState={setBoundsState}
-              />
-              <TopButtons />
-            </Grid>
-        </Grid>
         </>
     );
 }
