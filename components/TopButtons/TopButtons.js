@@ -20,7 +20,7 @@ function TopButtons() {
   // for menu end
 
   return (
-    <Box  sx={{position: "absolute", top: "0", left: "5rem", display: "flex", height: "4rem", width: "80%", alignItems: "center"}}>
+      <>
       <Box>
         <Button
             id="choose-rating"
@@ -31,7 +31,7 @@ function TopButtons() {
             variant="contained"
             endIcon={<KeyboardArrowDownIcon />}
             sx={[
-                {width: "11rem", backgroundColor: "#fff", color: '#111211'},
+                {width: "11rem", backgroundColor: "#fff", color: '#111211', height: "2.5rem"},
                 {
                     '&:hover': {
                         backgroundColor: 'grey',
@@ -57,7 +57,7 @@ function TopButtons() {
         </Menu>
       </Box>
       <Button variant="contained" sx={[
-          {margin: "0rem 1rem", backgroundColor: "#fff", color: '#111211'},
+          {margin: "0rem 1rem", backgroundColor: "#fff", color: '#111211', width: "8.5rem"},
           {
               '&:hover': {
                   backgroundColor: 'grey',
@@ -68,7 +68,7 @@ function TopButtons() {
       // onClick={handleRestaurantsBtnClick}
       >Restaurants</Button>
       <Button variant="contained" sx={[
-          {margin: "0rem 1rem", backgroundColor: "#fff", color: '#111211'},
+          {margin: "0rem 1rem", backgroundColor: "#fff", color: '#111211', width: "8.5rem"},
           {
               '&:hover': {
                   backgroundColor: 'grey',
@@ -79,7 +79,7 @@ function TopButtons() {
         // onClick={handleAttractionsBtnClick}
       >Attractions</Button>
       <Button variant="contained" sx={[
-          {margin: "0rem 1rem", backgroundColor: "#fff", color: '#111211'},
+          {margin: "0rem 1rem", backgroundColor: "#fff", color: '#111211', width: "8.5rem"},
           {
               '&:hover': {
                   backgroundColor: 'grey',
@@ -89,7 +89,8 @@ function TopButtons() {
       ]}
         // onClick={handleHotelsBtnClick}
       >Hotels</Button>
-    </Box>
+      </>
+    
   );
 }
 

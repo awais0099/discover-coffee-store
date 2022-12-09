@@ -11,7 +11,7 @@ export default function handler(req, res) {
         tr_latitude: tr_latitude,
         bl_longitude: bl_longitude,
         tr_longitude: tr_longitude,
-        limit: '8',
+        limit: '30',
       },
       headers: {
         'X-RapidAPI-Key': '4d72f977a4msh84e019d97fe9773p1a1817jsn9aae2affa6ee',
